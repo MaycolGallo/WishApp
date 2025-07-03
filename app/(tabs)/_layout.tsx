@@ -1,8 +1,11 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, View } from 'react-native';
+import { Link, Tabs, useRouter, useLocalSearchParams } from 'expo-router';
+import { Pressable, View, Alert } from 'react-native';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { db } from '../../lib/db';
+import { wishlists, wishlist_products } from '../../db/schema';
+import { eq } from 'drizzle-orm';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '../lib/useColorScheme';
@@ -17,6 +20,35 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const {colorScheme} = useColorScheme();
+  const router = useRouter();
+  const params = useLocalSearchParams();
+
+  const handleDeleteWishlist = () => {
+    const wishlistId = parseInt(params.id as string, 10);
+    if (!wishlistId) return;
+
+    Alert.alert(
+      "Delete Wishlist",
+      "Are you sure you want to delete this wishlist and all its products?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await db.delete(wishlist_products).where(eq(wishlist_products.wishlistId, wishlistId));
+              await db.delete(wishlists).where(eq(wishlists.id, wishlistId));
+              router.back();
+            } catch (error) {
+              console.error("Error deleting wishlist:", error);
+              Alert.alert("Error", "Failed to delete wishlist.");
+            }
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <Tabs
@@ -25,34 +57,70 @@ export default function TabLayout() {
         headerShown: true,
       }}>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Wishlists',
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Pressable onPress={() => router.push('/(tabs)/create-wishlist')}>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="plus"
+                    size={25}
+                    color={Colors[colorScheme ?? 'light'].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
               <ThemeToggle />
-              {/* <Link href="/modal" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <FontAwesome
-                      name="info-circle"
-                      size={25}
-                      color={Colors[colorScheme ?? 'light'].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link> */}
             </View>
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="wishlist-detail"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          href: null, // Hide from tab bar
+          title: 'Wishlist Details',
+          headerRight: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Pressable onPress={() => router.push({ pathname: '/(tabs)/add-product', params: { id: params.id } })}>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="plus"
+                    size={25}
+                    color={Colors[colorScheme ?? 'light'].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+              <Pressable onPress={handleDeleteWishlist}>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="trash"
+                    size={25}
+                    color={Colors[colorScheme ?? 'light'].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="add-product"
+        options={{
+          href: null, // Hide from tab bar
+          title: 'Add Product',
+        }}
+      />
+      <Tabs.Screen
+        name="create-wishlist"
+        options={{
+          href: null, // Hide from tab bar
+          title: 'Create Wishlist',
         }}
       />
     </Tabs>
