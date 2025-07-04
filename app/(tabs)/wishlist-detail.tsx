@@ -18,6 +18,9 @@ const WishlistDetailScreen = () => {
 
       const wishlist = await db.query.wishlists.findFirst({
         where: eq(wishlists.id, wishlistId),
+        // with:{
+
+        // }
       });
       setWishlistName(wishlist?.name || 'Wishlist');
 

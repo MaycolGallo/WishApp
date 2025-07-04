@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { db } from '../../lib/db';
-import { wishlists } from '../../db/schema';
+import { drizzle, useLiveQuery } from 'drizzle-orm/expo-sqlite';
+// import { db } from '../../lib/db';
+import * as schema from '../../db/schema';
+import {useSQLiteContext} from 'expo-sqlite'
+
 
 const HomeScreen = () => {
   const [allWishlists, setAllWishlists] = useState([]);
+  const db = useSQLiteContext()
+  const expoDB = drizzle(db, {schema})
   const router = useRouter();
+  const {data} = useLiveQuery(expoDB.select().from(schema.wishlists))
 
-  useEffect(() => {
-    const fetchWishlists = async () => {
-      try {
-        const result = await db.select().from(wishlists);
-        setAllWishlists(result);
-      } catch (error) {
-        console.error('Error fetching wishlists:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchWishlists = async () => {
+  //     try {
+  //       setAllWishlists(data);
+  //     } catch (error) {
+  //       console.error('Error fetching wishlists:', error);
+  //     }
+  //   };
 
-    fetchWishlists();
-  }, []);
+  //   fetchWishlists();
+  // }, []);
 
   const handleWishlistPress = (wishlistId) => {
     router.push({ pathname: '/(tabs)/wishlist-detail', params: { id: wishlistId } });
@@ -39,7 +44,7 @@ const HomeScreen = () => {
     <View className="flex-1 p-4 bg-gray-100">
       <Text className="text-2xl font-bold mb-4">All Wishlists</Text>
       <FlatList
-        data={allWishlists}
+        data={data}
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
         ListEmptyComponent={<Text>No wishlists found.</Text>}

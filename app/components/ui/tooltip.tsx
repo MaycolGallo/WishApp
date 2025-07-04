@@ -1,6 +1,6 @@
 import * as TooltipPrimitive from '@rn-primitives/tooltip';
 import * as React from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { TextClassContext } from './text';
 import { cn } from '../../lib/utils';
@@ -20,8 +20,9 @@ function TooltipContent({
 }) {
   return (
     <TooltipPrimitive.Portal hostName={portalHost}>
-      <TooltipPrimitive.Overlay style={Platform.OS !== 'web' ? StyleSheet.absoluteFill : undefined}>
-        <Animated.View
+      <TooltipPrimitive.Overlay asChild>
+        <View style={Platform.OS !== 'web' ? StyleSheet.absoluteFill : undefined}>
+          <Animated.View
           entering={Platform.select({ web: undefined, default: FadeIn })}
           exiting={Platform.select({ web: undefined, default: FadeOut })}
         >
@@ -36,6 +37,7 @@ function TooltipContent({
             />
           </TextClassContext.Provider>
         </Animated.View>
+        </View>
       </TooltipPrimitive.Overlay>
     </TooltipPrimitive.Portal>
   );
