@@ -1,25 +1,25 @@
-import React,{Suspense} from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs, useRouter, useLocalSearchParams } from 'expo-router';
-import { Pressable, View, Alert } from 'react-native';
-import { ThemeToggle } from '../components/ThemeToggle';
+import React, { Suspense } from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Link, Tabs, useRouter, useLocalSearchParams } from "expo-router";
+import { Pressable, View, Alert } from "react-native";
+import { ThemeToggle } from "../components/ThemeToggle";
 // import { db } from '../../lib/db';
-import { wishlists, wishlist_products } from '../../db/schema';
-import { eq } from 'drizzle-orm';
-import { SQLiteProvider, openDatabaseSync } from 'expo-sqlite'
-import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
-import { drizzle } from 'drizzle-orm/expo-sqlite';
+import { wishlists, wishlist_products } from "../../db/schema";
+import { eq } from "drizzle-orm";
+import { SQLiteProvider, openDatabaseSync } from "expo-sqlite";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { drizzle } from "drizzle-orm/expo-sqlite";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '../lib/useColorScheme';
-import migrations from '../../drizzle/migrations';
+import Colors from "~/constants/Colors";
+import { useColorScheme } from "../lib/useColorScheme";
+import migrations from "../../drizzle/migrations";
 
-const expo = openDatabaseSync('wishlists');
+const expo = openDatabaseSync("wishlists");
 const db = drizzle(expo);
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
@@ -60,26 +60,34 @@ export default function TabLayout() {
 
   return (
     <Suspense>
-      <SQLiteProvider databaseName='wishlists'
-       options={{enableChangeListener:true}} useSuspense>
+      <SQLiteProvider
+        databaseName="wishlists"
+        options={{ enableChangeListener: true }}
+        useSuspense
+      >
         <Tabs
           screenOptions={{
-            tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+            tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
             headerShown: true,
-          }}>
+          }}
+        >
           <Tabs.Screen
             name="home"
             options={{
-              title: 'Wishlists',
-              tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+              title: "Wishlists",
+              tabBarIcon: ({ color }) => (
+                <TabBarIcon name="home" color={color} />
+              ),
               headerRight: () => (
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Pressable onPress={() => router.push('/(tabs)/create-wishlist')}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Pressable
+                    onPress={() => router.push("/(tabs)/create-wishlist")}
+                  >
                     {({ pressed }) => (
                       <FontAwesome
                         name="plus"
                         size={25}
-                        color={Colors[colorScheme ?? 'light'].text}
+                        color={Colors[colorScheme ?? "light"].text}
                         style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                       />
                     )}
@@ -93,15 +101,22 @@ export default function TabLayout() {
             name="wishlist-detail"
             options={{
               href: null, // Hide from tab bar
-              title: 'Wishlist Details',
+              title: "Wishlist Details",
               headerRight: () => (
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Pressable onPress={() => router.push({ pathname: '/(tabs)/add-product', params: { id: params.id } })}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Pressable
+                    onPress={() =>
+                      router.push({
+                        pathname: "/(tabs)/add-product",
+                        params: { id: params.id },
+                      })
+                    }
+                  >
                     {({ pressed }) => (
                       <FontAwesome
                         name="plus"
                         size={25}
-                        color={Colors[colorScheme ?? 'light'].text}
+                        color={Colors[colorScheme ?? "light"].text}
                         style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                       />
                     )}
@@ -111,7 +126,7 @@ export default function TabLayout() {
                       <FontAwesome
                         name="trash"
                         size={25}
-                        color={Colors[colorScheme ?? 'light'].text}
+                        color={Colors[colorScheme ?? "light"].text}
                         style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                       />
                     )}
@@ -124,14 +139,14 @@ export default function TabLayout() {
             name="add-product"
             options={{
               href: null, // Hide from tab bar
-              title: 'Add Product',
+              title: "Add Product",
             }}
           />
           <Tabs.Screen
             name="create-wishlist"
             options={{
               href: null, // Hide from tab bar
-              title: 'Create Wishlist',
+              title: "Create Wishlist",
             }}
           />
         </Tabs>

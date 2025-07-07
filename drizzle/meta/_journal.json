@@ -15,6 +15,13 @@
       "when": 1751139445414,
       "tag": "0001_sloppy_unus",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1751841219166,
+      "tag": "0002_wooden_nomad",
+      "breakpoints": true
     }
   ]
 }

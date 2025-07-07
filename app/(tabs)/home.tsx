@@ -26,11 +26,11 @@ const HomeScreen = () => {
   //   fetchWishlists();
   // }, []);
 
-  const handleWishlistPress = (wishlistId) => {
+  const handleWishlistPress = (wishlistId: number) => {
     router.push({ pathname: '/(tabs)/wishlist-detail', params: { id: wishlistId } });
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: { item: schema.Wishlist }) => (
     <TouchableOpacity onPress={() => handleWishlistPress(item.id)}>
       <View className="p-4 mb-4 bg-white rounded-lg shadow">
         <Text className="text-lg font-bold">{item.name}</Text>
@@ -41,7 +41,7 @@ const HomeScreen = () => {
   );
 
   return (
-    <View className="flex-1 p-4 bg-gray-100">
+    <View className="flex-1 p-4 bg-gray-100 dark:bg-neutral-600">
       <Text className="text-2xl font-bold mb-4">All Wishlists</Text>
       <FlatList
         data={data}

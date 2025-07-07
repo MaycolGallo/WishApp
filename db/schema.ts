@@ -15,6 +15,7 @@ export const wishlists = sqliteTable("wishlists", {
   description: text(),
   totalPrice: int().notNull(),
   completed: int().notNull(), // 0 or 1
+  imageUrl: text(),
 
 });
 
@@ -35,3 +36,12 @@ export const wishlist_products = sqliteTable("wishlist_products", {
   wishlistId: int().notNull().references(() => wishlists.id),
   productId: int().notNull().references(() => products.id),
 });
+
+
+export type Product = typeof products.$inferSelect;
+export type Wishlist = typeof wishlists.$inferSelect;
+export type Category = typeof categories.$inferSelect;
+export type ProductCategory = typeof product_categories.$inferSelect;
+export type WishlistProduct = typeof wishlist_products.$inferSelect;
+
+export type WhislitPayload = typeof wishlists.$inferInsert;
