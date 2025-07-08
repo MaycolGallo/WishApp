@@ -16,7 +16,7 @@ export const wishlists = sqliteTable("wishlists", {
   totalPrice: int().notNull(),
   completed: int().notNull(), // 0 or 1
   imageUrl: text(),
-
+  url: text(),
 });
 
 export const categories = sqliteTable("categories", {

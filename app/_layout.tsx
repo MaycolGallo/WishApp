@@ -25,15 +25,22 @@ export {
   ErrorBoundary,
 } from 'expo-router';
 
-const usePlatformSpecificSetup = Platform.select({
-  web: useSetWebBackgroundClassName,
-  android: useSetAndroidNavigationBar,
-  default: noop,
-});
+// const usePlatformSpecificSetup = Platform.select({
+//   web: useSetWebBackgroundClassName,
+//   android: useSetAndroidNavigationBar,
+//   default: noop,
+// });
 
 export default function RootLayout() {
-  usePlatformSpecificSetup();
-  const { isDarkColorScheme } = useColorScheme();
+  // usePlatformSpecificSetup();
+  const { colorScheme, isDarkColorScheme } = useColorScheme();
+
+  React.useLayoutEffect(() => {
+    if (Platform.OS === 'android') {
+      setAndroidNavigationBar(colorScheme);
+    }
+  }, [colorScheme]);
+
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
@@ -53,6 +60,7 @@ export default function RootLayout() {
   );
 }
 
+/*
 const useIsomorphicLayoutEffect =
   Platform.OS === 'web' && typeof window === 'undefined' ? React.useEffect : React.useLayoutEffect;
 
@@ -70,3 +78,4 @@ function useSetAndroidNavigationBar() {
 }
 
 function noop() {}
+*/
