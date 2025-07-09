@@ -3,22 +3,25 @@ import {
   View,
   Text,
   FlatList,
-  Image,
   TouchableOpacity,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import { useLocalSearchParams, useFocusEffect } from "expo-router";
-import { db } from "../../lib/db";
-import * as schema from "../../db/schema";
+import { db } from "../lib/db";
+import * as schema from "../db/schema";
 import { eq, and } from "drizzle-orm";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useSQLiteContext } from "expo-sqlite";
+import { Image, useImage } from "expo-image";
 
 const WishlistDetailScreen = () => {
   const { id } = useLocalSearchParams();
   const [wishlistItems, setWishlistItems] = useState([]);
-  const [wishlistName, setWishlistName] = useState("");
+  const [wishlist, setWishlist] = useState<schema.Wishlist | null>(null);
+
+  // const image = useImage(wishlist?.imageUrl);
 
   const db = useSQLiteContext();
   const expoDB = drizzle(db, { schema });
@@ -29,12 +32,12 @@ const WishlistDetailScreen = () => {
       const wishlistId = parseInt(id as string, 10);
 
       const wishlist = await expoDB.query.wishlists.findFirst({
-        where: eq(wishlists.id, wishlistId),
+        where: eq(schema.wishlists.id, wishlistId),
         // with:{
 
         // }
       });
-      setWishlistName(wishlist?.name || "Wishlist");
+      setWishlist(wishlist);
 
       // setWishlistItems(items);
     } catch (error) {
@@ -79,32 +82,42 @@ const WishlistDetailScreen = () => {
     );
   };
 
-  const renderItem = ({ item }) => (
-    <View className="flex-row mb-4 bg-white rounded-lg overflow-hidden shadow items-center">
-      <Image source={{ uri: item.imageUrl }} className="w-24 h-24" />
-      <View className="flex-1 p-3 justify-center">
-        <Text className="text-lg font-bold">{item.name}</Text>
-        <Text className="text-base text-gray-500 mt-1">${item.price}</Text>
-        <Text className="text-sm text-gray-400 mt-1">{item.category}</Text>
-      </View>
-      <TouchableOpacity
-        onPress={() => handleRemoveProduct(item.id)}
-        className="p-3"
-      >
-        <FontAwesome name="trash" size={24} color="red" />
-      </TouchableOpacity>
-    </View>
+  return (
+    <SafeAreaView className="flex-1 bg-gray-100">
+      <RenderItem item={wishlist!} />
+    </SafeAreaView>
   );
+};
+
+const RenderItem = ({ item }: { item: schema.Wishlist }) => {
+  // const image = useImage(item.imageUrl!);
+
+  // if (!image) {
+  //   return <Text>Image is loading...</Text>;
+  // }
+
+  if (!item) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
-    <View className="flex-1 p-4 bg-gray-100">
-      <Text className="text-2xl font-bold mb-4">{wishlistName}</Text>
-      <FlatList
-        data={wishlistItems}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        ListEmptyComponent={<Text>This wishlist is empty.</Text>}
+    <View className="items-center flex-1">
+      <Image
+        source={{ uri: item?.imageUrl! }}
+        style={{ width: "100%", height: 300, borderRadius: 10 }}
+        contentFit="fill"
+        transition={500}
+        // contentPosition={"top"}
       />
+
+      <View className="p-4">
+        <Text className="mb-4 text-2xl font-bold">{item?.name}</Text>
+        <Text className="mt-1 text-base text-gray-500">
+          ${item?.totalPrice}
+          {JSON.stringify(item)}
+          {/* {image && JSON.stringify(image)} */}
+        </Text>
+      </View>
     </View>
   );
 };
