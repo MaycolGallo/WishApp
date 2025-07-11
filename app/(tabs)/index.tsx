@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
-  Text,
+  // Text,
   FlatList,
   TouchableOpacity,
   Pressable,
@@ -15,6 +15,7 @@ import { Image } from "expo-image";
 import * as FileSystem from "expo-file-system";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Colors from "~/constants/Colors";
+import Text  from "../components/ui/text-ui";
 
 const HomeScreen = () => {
   const [allWishlists, setAllWishlists] = useState([]);
@@ -52,8 +53,8 @@ const HomeScreen = () => {
             contentFit="cover"
           />
           <View className="p-4">
-            <Text className="text-lg font-bold">{item.name}</Text>
-            <Text className="mt-1 text-base text-gray-500">
+            <Text variant="h2">{item.name}</Text>
+            <Text weight="semiBold" className="mt-1 text-base text-gray-500">
               Total: ${item.totalPrice}
             </Text>
             <Text className="mt-1 text-sm text-gray-400">
@@ -66,8 +67,8 @@ const HomeScreen = () => {
   };
 
   return (
-    <View className="flex-1 p-4 bg-gray-100 dark:bg-neutral-200">
-      <Text className="mb-4 text-2xl font-bold">All Wishlists</Text>
+    <View className="flex-1 p-4 bg-gray-100 dark:bg-blue-200">
+      <Text variant="h1" className="text-center mb-4">Main Header</Text>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -76,7 +77,7 @@ const HomeScreen = () => {
         numColumns={2}
         // key={2} // Force re-render on column change
       />
-      <Text>{JSON.stringify(data)}</Text>
+      {/* <Text>{JSON.stringify(data)}</Text> */}
       <View
         style={{
           position: "absolute",

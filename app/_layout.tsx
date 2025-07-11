@@ -9,7 +9,7 @@ import {
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { Appearance, Platform, SafeAreaView, View } from "react-native";
+import { Appearance, Platform, View } from "react-native";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "@rn-primitives/portal";
@@ -19,6 +19,7 @@ import { openDatabaseSync, SQLiteProvider } from "expo-sqlite";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import migrations from "../drizzle/migrations";
 import { drizzle } from "drizzle-orm/expo-sqlite";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -63,20 +64,22 @@ export default function RootLayout() {
       >
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
           <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="create-wishlist"
-              options={{
-                title: "Create Wishlist",
-                headerTitleAlign: "center",
-              }}
-            />
-            <Stack.Screen
-              name="wishlist-detail"
-              options={{ title: "Wishlist Details", headerShown: false }}
-            />
-          </Stack>
+          {/* <SafeAreaProvider> */}
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="create-wishlist"
+                options={{
+                  title: "Create Wishlist",
+                  headerTitleAlign: "center",
+                }}
+              />
+              <Stack.Screen
+                name="wishlist-detail"
+                options={{ title: "Wishlist Details", headerShown: false }}
+              />
+            </Stack>
+          {/* </SafeAreaProvider> */}
           <PortalHost />
         </ThemeProvider>
       </SQLiteProvider>
