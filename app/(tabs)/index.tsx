@@ -48,8 +48,8 @@ const HomeScreen = () => {
       >
         <View className="overflow-hidden bg-white rounded-lg shadow">
           <Image
-            source={{ uri: item.imageUrl }}
-            style={{ width: "100%", height: "120" }}
+            source={{ uri: item.imageUrl! }}
+            style={{ width: "100%", height: 120 }}
             contentFit="cover"
           />
           <View className="p-4">

@@ -6,6 +6,7 @@ import { ThemeToggle } from "../components/ThemeToggle";
 
 import Colors from "~/constants/Colors";
 import { useColorScheme } from "../lib/useColorScheme";
+import { SQLiteProvider } from "expo-sqlite";
 
 
 function TabBarIcon(props: {
@@ -38,7 +39,7 @@ export default function TabLayout() {
     //           await db.delete(wishlists).where(eq(wishlists.id, wishlistId));
     //           router.back();
     //         } catch (error) {
-    //           console.error("Error deleting wishlist:", error);
+    //           console.error("Error deleting 0ppo0ishlist:", error);
     //           Alert.alert("Error", "Failed to delete wishlist.");
     //         }
     //       },
@@ -48,12 +49,12 @@ export default function TabLayout() {
   };
 
   return (
-    // <Suspense>
-    //   <SQLiteProvider
-    //     databaseName="wishlists"
-    //     options={{ enableChangeListener: true }}
-    //     useSuspense
-    //   >
+    <Suspense>
+      <SQLiteProvider
+        databaseName="wishlists"
+        options={{ enableChangeListener: true }}
+        useSuspense
+      >
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -73,7 +74,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-    //   </SQLiteProvider>
-    // </Suspense>
+       </SQLiteProvider>
+     </Suspense>
   );
 }
