@@ -3,18 +3,10 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs, useRouter, useLocalSearchParams } from "expo-router";
 import { Pressable, View, Alert } from "react-native";
 import { ThemeToggle } from "../components/ThemeToggle";
-import { wishlists, wishlist_products } from "../../db/schema";
-import { eq } from "drizzle-orm";
-import { SQLiteProvider, openDatabaseSync } from "expo-sqlite";
-import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 
 import Colors from "~/constants/Colors";
 import { useColorScheme } from "../lib/useColorScheme";
-import migrations from "../../drizzle/migrations";
 
-const expo = openDatabaseSync("wishlists");
-const db = drizzle(expo);
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
