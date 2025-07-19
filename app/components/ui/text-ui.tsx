@@ -10,6 +10,7 @@ import { useFonts,
   Nunito_800ExtraBold,
   Nunito_900Black
 } from '@expo-google-fonts/nunito';
+import { cn } from '~/lib/utils';
 
 // Define the available font weights
 type FontWeight = 
@@ -133,7 +134,7 @@ const Text: React.FC<CustomTextProps> = ({
         color && { color },
         style
       ]}
-      className={className}
+      className={cn("dark:text-white",className)}
       {...props}
     >
       {children}

@@ -1,12 +1,16 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   View,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  KeyboardAvoidingView,
 } from "react-native";
-import Text  from "./components/ui/text-ui";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import Text from "./components/ui/text-ui";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { useRouter, useFocusEffect } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
 import { drizzle } from "drizzle-orm/expo-sqlite";
@@ -40,7 +44,7 @@ const CreateWishlistScreen = () => {
   });
 
   const db = useSQLiteContext();
-  const expoDB = drizzle(db, { schema });
+  const expoDB = useMemo(() => drizzle(db, { schema }), [db]);
   const router = useRouter();
 
   const [categories, setCategories] = useState<schema.Category[]>([]);
@@ -145,35 +149,30 @@ const CreateWishlistScreen = () => {
   };
 
   return (
-    <View className="flex-1 bg-white dark:bg-gray-900">
-      <ScrollView className="p-4">
-        {/* Product Form Fields */}
-        <ProductForm control={control} errors={errors} />
+    <View className="flex-1 bg-white dark:bg-neutral-900">
+      <ScrollView className="flex-1 p-4">
+      {/* Product Form Fields */}
+      <ProductForm control={control} errors={errors} />
 
-        <Text className="mb-2 text-lg font-semibold dark:text-white text-gray-700">
-          Categories
-        </Text>
-        <CategorySelector
-          categories={categories}
-          selectedCategories={selectedCategories}
-          toggleCategory={toggleCategory}
-        />
+      <AddCategoryInput
+        categories={categories}
+        selectedCategories={selectedCategories}
+        toggleCategory={toggleCategory}
+        control={control}
+        handleCreateCategory={handleCreateCategory}
+      />
 
-        
-        <AddCategoryInput
-          control={control}
-          handleCreateCategory={handleCreateCategory}
-        />
-
+      </ScrollView>
+      {/* <KeyboardAvoidingView behavior="height">
         <TouchableOpacity
-          className="p-4 bg-blue-500 rounded-xl absolute bottom-0 left-4 right-4  "
+          className="p-4 rounded-xl  "
           onPress={handleSubmit(handleCreate)}
         >
           <Text weight="bold" variant="h4" className=" text-center text-white">
             Create Wishlist
           </Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAvoidingView> */}
     </View>
   );
 };

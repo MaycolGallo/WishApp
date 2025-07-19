@@ -11,12 +11,13 @@ function Input({
 }) {
   return (
     <TextInput
+      style={{ fontFamily: "Nunito_400Regular", borderRadius: 12 }}
       className={cn(
-        "web:flex h-10 native:h-12 web:w-full roundded-xl border border-input bg-background px-3 web:py-2 text-base lg:text-sm native:text-lg native:leading-[1.25] text-foreground placeholder:text-muted-foreground web:ring-offset-background file:border-0 file:bg-transparent file:font-medium web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2",
-        props.editable === false && "opacity-50 web:cursor-not-allowed",
+        "flex h-10 dark:border-gray-700 dark:bg-gray-800 native:h-12 w-full rounded-xl border border-input bg-background px-3 py-2 text-base lg:text-sm native:text-lg native:leading-[1.25] text-foreground placeholder:text-muted-foreground ring-offset-background",
+        props.editable === false && "opacity-50 cursor-not-allowed",
         className
       )}
-      placeholderClassName={cn("text-muted-foreground", placeholderClassName)}
+      placeholderClassName={cn("dark:text-gray-400", placeholderClassName)}
       {...props}
     />
   );

@@ -1,7 +1,8 @@
 import React from "react";
-import { Text, TextInput } from "react-native";
+import { TextInput } from "react-native";
 import { Controller, Control, FieldErrors } from "react-hook-form";
 import { Input } from "../components/ui/input";
+import  Text  from "../components/ui/text-ui";
 
 interface ProductFormProps {
   control: Control<any>;
@@ -10,15 +11,15 @@ interface ProductFormProps {
 
 const ProductForm: React.FC<ProductFormProps> = ({ control, errors }) => (
   <>
-    <Text className="mb-2 text-lg font-semibold text-gray-700">
+    <Text variant="subtitle" className="mb-2 dark:text-white text-gray-700">
       Product Name
     </Text>
     <Controller
       control={control}
       rules={{ required: "Please enter a name for the product." }}
       render={({ field: { onChange, onBlur, value } }) => (
-        <TextInput
-          className="p-3 mb-4 text-base bg-white border border-gray-300 rounded-lg"
+        <Input
+          className="p-3 mb-4 bg-white border border-gray-300 rounded-lg"
           onBlur={onBlur}
           onChangeText={onChange}
           value={value}
@@ -31,13 +32,13 @@ const ProductForm: React.FC<ProductFormProps> = ({ control, errors }) => (
       <Text className="mb-4 text-red-500">{errors.name.message.toString()}</Text>
     )}
 
-    <Text className="mb-2 text-lg font-semibold text-gray-700">Amount</Text>
+    <Text variant="subtitle" className="mb-2 dark:text-white text-gray-700">Amount</Text>
     <Controller
       control={control}
       rules={{ required: "Please enter an amount." }}
       render={({ field: { onChange, onBlur, value } }) => (
-        <TextInput
-          className="p-3 mb-4 text-base bg-white border border-gray-300 rounded-lg"
+        <Input
+          className="p-3 mb-4  bg-white border border-gray-300"
           onBlur={onBlur}
           onChangeText={(text) => onChange(parseInt(text))}
           value={value.toString()}
@@ -48,17 +49,17 @@ const ProductForm: React.FC<ProductFormProps> = ({ control, errors }) => (
       name="totalPrice"
     />
     {errors.totalPrice && (
-      <Text className="mb-4 text-red-500">{errors.totalPrice.message}</Text>
+      <Text className="mb-4 text-red-500">{errors.totalPrice.message?.toString()}</Text>
     )}
 
-    <Text className="mb-2 text-lg font-semibold text-gray-700">
+    <Text variant="subtitle" className="mb-2 dark:text-white text-gray-700">
       Description (Optional)
     </Text>
     <Controller
       control={control}
       render={({ field: { onChange, onBlur, value } }) => (
         <Input
-          className="p-3 mb-6 text-base bg-white border border-gray-300 rounded-lg"
+          className="p-3 mb-6 bg-white border border-gray-300 rounded-lg"
           onBlur={onBlur}
           onChangeText={onChange}
           value={value}
@@ -68,7 +69,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ control, errors }) => (
       name="description"
     />
 
-    <Text className="mb-2 text-lg font-semibold text-gray-700">
+    <Text variant="subtitle" className="mb-2 dark:text-white text-gray-700">
       Image URL (Optional)
     </Text>
     <Controller
@@ -85,7 +86,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ control, errors }) => (
       name="imageUrl"
     />
 
-    <Text className="mb-2 text-lg font-semibold text-gray-700">
+    <Text variant="subtitle" className="mb-2 dark:text-white text-gray-700">
       Product URL (Optional)
     </Text>
     <Controller

@@ -19,6 +19,8 @@ import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import migrations from "../drizzle/migrations";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -43,7 +45,10 @@ export default function RootLayout() {
         useSuspense
       >
         <GestureHandlerRootView style={{ flex: 1 }}>
+                <BottomSheetModalProvider>
+          
           <App />
+          </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </SQLiteProvider>
     </React.Suspense>

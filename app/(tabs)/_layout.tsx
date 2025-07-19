@@ -25,36 +25,10 @@ export default function TabLayout() {
     const wishlistId = parseInt(params.id as string, 10);
     if (!wishlistId) return;
 
-    // Alert.alert(
-    //   "Delete Wishlist",
-    //   "Are you sure you want to delete this wishlist and all its products?",
-    //   [
-    //     { text: "Cancel", style: "cancel" },
-    //     {
-    //       text: "Delete",
-    //       style: "destructive",
-    //       onPress: async () => {
-    //         try {
-    //           await db.delete(wishlist_products).where(eq(wishlist_products.wishlistId, wishlistId));
-    //           await db.delete(wishlists).where(eq(wishlists.id, wishlistId));
-    //           router.back();
-    //         } catch (error) {
-    //           console.error("Error deleting 0ppo0ishlist:", error);
-    //           Alert.alert("Error", "Failed to delete wishlist.");
-    //         }
-    //       },
-    //     },
-    //   ]
-    // );
   };
 
   return (
-    // <Suspense>
-    //   <SQLiteProvider
-    //     databaseName="wishlists"
-    //     options={{ enableChangeListener: true }}
-    //     useSuspense
-    //   >
+    
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -74,7 +48,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-    //    </SQLiteProvider>
-    //  </Suspense>
   );
 }
