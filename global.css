@@ -2,7 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 100% 6%; /* rich-black */
+    --card: 0 0% 100%;
+    --card-foreground: 240 100% 6%; /* rich-black */
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 100% 6%; /* rich-black */
+    --primary: 0 100% 41%; /* engineering-orange */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 38 100% 50%; /* princeton-orange */
+    --secondary-foreground: 240 100% 6%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 350 93% 20%; /* rosewood */
+    --accent: 48 100% 52%; /* selective-yellow */
+    --accent-foreground: 240 100% 6%;
+    --destructive: 6 100% 43%; /* sinopia */
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 91%;
+    --input: 0 0% 91%;
+    --ring: 0 100% 41%; /* engineering-orange */
+  }
+
+  .dark:root {
+    --background: 240 100% 6%; /* rich-black */
+    --foreground: 0 0% 98%;
+    --card: 350 93% 10%; /* chocolate-cosmos */
+    --card-foreground: 0 0% 98%;
+    --popover: 350 93% 10%; /* chocolate-cosmos */
+    --popover-foreground: 0 0% 98%;
+    --primary: 6 100% 43%; /* sinopia */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 38 100% 50%; /* princeton-orange */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 350 93% 20%; /* rosewood */
+    --muted-foreground: 38 100% 65%;
+    --accent: 48 100% 52%; /* selective-yellow */
+    --accent-foreground: 240 100% 6%;
+    --destructive: 21 100% 47%; /* persimmon */
+    --destructive-foreground: 0 0% 98%;
+    --border: 350 93% 20%; /* rosewood */
+    --input: 350 93% 20%; /* rosewood */
+    --ring: 46 100% 52%; /* orange-web */
+  }
+}
+
+/* @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
@@ -46,4 +93,4 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
-}
+} */

@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
 import {
   View,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
@@ -98,7 +97,7 @@ const CreateWishlistScreen = () => {
   const handleCreate = async (data: FormData): Promise<void> => {
     try {
       let localUri = "";
-      if (data.imageUrl) {
+      if (data.imageUrl && FileSystem.documentDirectory) {
         const fileUri =
           FileSystem.documentDirectory + data.imageUrl.split("/").pop();
         const downloadResult = await FileSystem.downloadAsync(
@@ -146,15 +145,12 @@ const CreateWishlistScreen = () => {
   };
 
   return (
-    <View>
-      <Text style={{ fontSize: 17, fontWeight: "600", textAlign: "center" }}>
-        Create Wishlist
-      </Text>
-      <ScrollView contentContainerStyle={{ padding: 16 }}>
+    <View className="flex-1 bg-white dark:bg-gray-900">
+      <ScrollView className="p-4">
         {/* Product Form Fields */}
         <ProductForm control={control} errors={errors} />
 
-        <Text className="mb-2 text-lg font-semibold text-gray-700">
+        <Text className="mb-2 text-lg font-semibold dark:text-white text-gray-700">
           Categories
         </Text>
         <CategorySelector
@@ -163,20 +159,18 @@ const CreateWishlistScreen = () => {
           toggleCategory={toggleCategory}
         />
 
-        <Text className="mb-2 text-lg font-semibold text-gray-700">
-          Add New Category
-        </Text>
+        
         <AddCategoryInput
           control={control}
           handleCreateCategory={handleCreateCategory}
         />
 
         <TouchableOpacity
-          className="p-4 mb-24 bg-blue-500 rounded-lg"
+          className="p-4 bg-blue-500 rounded-xl absolute bottom-0 left-4 right-4  "
           onPress={handleSubmit(handleCreate)}
         >
-          <Text className="text-lg font-bold text-center text-white">
-            Create Wishlist {JSON.stringify(db)}
+          <Text weight="bold" variant="h4" className=" text-center text-white">
+            Create Wishlist
           </Text>
         </TouchableOpacity>
       </ScrollView>

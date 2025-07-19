@@ -36,15 +36,15 @@ export {
 
 export default function RootLayout() {
   return (
-    <React.Suspense
-      fallback={
-        <Text>
-          Loading...
-        </Text>
-      }
-    >
-      <SQLiteProvider databaseName="wishlists" options={{ enableChangeListener: true }} useSuspense>
-        <App />
+    <React.Suspense fallback={<Text>Loading...</Text>}>
+      <SQLiteProvider
+        databaseName="wishlists"
+        options={{ enableChangeListener: true }}
+        useSuspense
+      >
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <App />
+        </GestureHandlerRootView>
       </SQLiteProvider>
     </React.Suspense>
   );
@@ -71,26 +71,24 @@ function App() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="create-wishlist"
-            options={{
-              title: "Create Wishlist",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Stack.Screen
-            name="wishlist-detail"
-            options={{
-              title: "Wishlist Details",
-              headerTitleAlign: "center",
-            }}
-          />
-        </Stack>
-      </GestureHandlerRootView>
+      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="create-wishlist"
+          options={{
+            title: "Create Wishlist",
+            headerTitleAlign: "center",
+          }}
+        />
+        <Stack.Screen
+          name="wishlist-detail"
+          options={{
+            title: "Wishlist Details",
+            headerTitleAlign: "center",
+          }}
+        />
+      </Stack>
       <PortalHost />
     </ThemeProvider>
   );

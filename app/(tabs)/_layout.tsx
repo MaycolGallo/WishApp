@@ -49,12 +49,12 @@ export default function TabLayout() {
   };
 
   return (
-    <Suspense>
-      <SQLiteProvider
-        databaseName="wishlists"
-        options={{ enableChangeListener: true }}
-        useSuspense
-      >
+    // <Suspense>
+    //   <SQLiteProvider
+    //     databaseName="wishlists"
+    //     options={{ enableChangeListener: true }}
+    //     useSuspense
+    //   >
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -74,7 +74,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-       </SQLiteProvider>
-     </Suspense>
+    //    </SQLiteProvider>
+    //  </Suspense>
   );
 }
