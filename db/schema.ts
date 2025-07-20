@@ -1,11 +1,5 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const products = sqliteTable("products", {
-  id: int().primaryKey({ autoIncrement: true }),
-  nombre: text().notNull(),
-  price: int().notNull(),
-  imageUrl: text().notNull(),
-});
 
 // One-to-many: wishlists to products
 export const wishlists = sqliteTable("wishlists", {
@@ -16,6 +10,8 @@ export const wishlists = sqliteTable("wishlists", {
   totalPrice: int().notNull(),
   completed: int().notNull(), // 0 or 1
   imageUrl: text(),
+  date_completed: integer({ mode: 'timestamp'}),
+  available: integer({ mode: 'boolean' }).default(true),
   url: text(),
 });
 
@@ -25,23 +21,23 @@ export const categories = sqliteTable("categories", {
 });
 
 // Many-to-many: products <-> categories
-export const product_categories = sqliteTable("product_categories", {
-  productId: int().notNull().references(() => products.id),
+export const wishlist_categories = sqliteTable("wishlist_categories", {
+  wishlistId: int().notNull().references(() => wishlists.id),
   categoryId: int().notNull().references(() => categories.id),
 });
 
 // One-to-many: wishlists <-> products (wishlist can have many products)
-export const wishlist_products = sqliteTable("wishlist_products", {
+export const list_wishlists = sqliteTable("list_wishlists", {
   id: int().primaryKey({ autoIncrement: true }),
   wishlistId: int().notNull().references(() => wishlists.id),
-  productId: int().notNull().references(() => products.id),
+  categoryId: int().notNull().references(() => categories.id),
 });
 
 
-export type Product = typeof products.$inferSelect;
+// export type Product = typeof products.$inferSelect;
 export type Wishlist = typeof wishlists.$inferSelect;
 export type Category = typeof categories.$inferSelect;
-export type ProductCategory = typeof product_categories.$inferSelect;
-export type WishlistProduct = typeof wishlist_products.$inferSelect;
+export type WishlistCategory = typeof wishlist_categories.$inferSelect;
+export type ListWishlist = typeof list_wishlists.$inferSelect;
 
 export type WhislitPayload = typeof wishlists.$inferInsert;

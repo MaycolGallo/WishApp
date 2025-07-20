@@ -22,15 +22,15 @@ const WishlistGrid: React.FC<WishlistGridProps> = ({ wishlists }) => {
         onPress={() => handleWishlistPress(item.id)}
         className="flex-1 m-2"
       >
-        <View className="overflow-hidden bg-white rounded-lg shadow">
+        <View className="overflow-hidden border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 rounded-lg shadow">
           <Image
             source={{ uri: item.imageUrl! }}
             style={{ width: '100%', height: 120 }}
             contentFit="cover"
           />
           <View className="p-4">
-            <Text variant="h2">{item.name}</Text>
-            <Text weight="semiBold" className="mt-1 text-base text-gray-500">
+            <Text variant="h4">{item.name}</Text>
+            <Text weight="semiBold" className="mt-1 text-neutral-500">
               Total: ${item.totalPrice}
             </Text>
             <Text className="mt-1 text-sm text-gray-400">

@@ -40,7 +40,11 @@ const AddCategoryInput: React.FC<AddCategoryInputProps> = ({
 
   const renderBackdrop = useCallback(
     (props: any) => (
-      <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+      />
     ),
     []
   );
@@ -79,19 +83,33 @@ const AddCategoryInput: React.FC<AddCategoryInputProps> = ({
         enablePanDownToClose
         // onChange={handleSheetChanges}
       >
-        <BottomSheetView className="flex-1 p-4">
-          <Text variant="subtitle" className="mb-2 dark:text-white text-gray-700">
+        <BottomSheetView className="flex-1 p-4 dark:bg-neutral-800">
+          <Text
+            variant="subtitle"
+            className="mb-2 dark:text-white text-gray-700"
+          >
             Nombre
           </Text>
-          <BottomSheetTextInput
-            className="p-3 mb-4 bg-white border border-gray-300 rounded-lg"
-            placeholder="Category Name"
+          <Controller
+            control={control}
+            name="newCategoryName"
+            rules={{ required: "Please enter a name for the category." }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <BottomSheetTextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholderClassName="dark:text-gray-400"
+                className="p-3 mb-4 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-300 rounded-lg"
+                placeholder="Category Name"
+              />
+            )}
           />
           <TouchableOpacity
-            className="justify-center p-3 m-4 bg-green-500 rounded-r-lg"
+            className="justify-center p-3 my-4 bg-primary "
             onPress={handleCreateCategory}
           >
-            <Text className="font-bold text-white">Add</Text>
+            <Text className="font-bold text-center text-white">Crear</Text>
           </TouchableOpacity>
         </BottomSheetView>
       </BottomSheetModal>

@@ -21,6 +21,7 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { db } from "~/lib/db";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -36,6 +37,7 @@ export {
   ErrorBoundary,
 } from "expo-router";
 
+
 export default function RootLayout() {
   return (
     <React.Suspense fallback={<Text>Loading...</Text>}>
@@ -45,9 +47,8 @@ export default function RootLayout() {
         useSuspense
       >
         <GestureHandlerRootView style={{ flex: 1 }}>
-                <BottomSheetModalProvider>
-          
-          <App />
+          <BottomSheetModalProvider>
+            <App />
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </SQLiteProvider>
@@ -57,8 +58,8 @@ export default function RootLayout() {
 
 function App() {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
-  const db = useSQLiteContext();
-  const { success, error } = useMigrations(drizzle(db), migrations);
+  // const db = useSQLiteContext();
+  const { success, error } = useMigrations(db, migrations);
 
   React.useLayoutEffect(() => {
     if (Platform.OS === "android") {

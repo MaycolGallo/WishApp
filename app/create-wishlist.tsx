@@ -22,6 +22,8 @@ import AddCategoryInput from "./components/AddCategoryInput";
 import ProductForm from "./components/ProductForm";
 import * as FileSystem from "expo-file-system";
 import "../global.css";
+import { db } from "~/lib/db";
+import { useBottomSheet, useBottomSheetModal } from "@gorhom/bottom-sheet";
 
 const CreateWishlistScreen = () => {
   const insets = useSafeAreaInsets();
@@ -43,22 +45,23 @@ const CreateWishlistScreen = () => {
     },
   });
 
-  const db = useSQLiteContext();
-  const expoDB = useMemo(() => drizzle(db, { schema }), [db]);
+  // const db = useSQLiteContext();
+  // const expoDB = drizzle(db, { schema });
   const router = useRouter();
+  const { dismiss } = useBottomSheetModal();
 
   const [categories, setCategories] = useState<schema.Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
   const fetchCategories = useCallback(async () => {
     try {
-      const allCategories = await expoDB.select().from(schema.categories);
+      const allCategories = await db.select().from(schema.categories);
       setCategories(allCategories);
     } catch (error) {
       console.error("Error fetching categories:", error);
       alert("Failed to fetch categories.");
     }
-  }, [expoDB]);
+  }, [db]);
 
   useFocusEffect(
     useCallback(() => {
@@ -73,9 +76,10 @@ const CreateWishlistScreen = () => {
       return;
     }
     try {
-      await expoDB.insert(schema.categories).values({ name: newCategoryName });
+      await db.insert(schema.categories).values({ name: newCategoryName });
       setValue("newCategoryName", "");
       fetchCategories(); // Refetch categories to update the list
+      dismiss();
     } catch (error) {
       console.error("Error creating category:", error);
       alert("Failed to create category.");
@@ -116,23 +120,29 @@ const CreateWishlistScreen = () => {
       }
 
       // 1. Create the product
-      const [newProduct] = await expoDB
-        .insert(schema.products)
+      const [newProduct] = await db
+        .insert(schema.wishlists)
         .values({
-          nombre: data.name,
-          price: data.totalPrice,
+          name: data.name,
+          totalPrice: data.totalPrice,
           imageUrl: localUri,
+          url: data.url,
+          description: data.description,
+          createdAt: new Date().toISOString(),
+          completed: 0,
         })
         .returning();
+
+        console.log("newProduct", newProduct);
 
       // 2. Link product to selected categories
       if (newProduct && selectedCategories.length > 0) {
         const productCategoryValues = selectedCategories.map((catId) => ({
-          productId: newProduct.id,
+          wishlistId: newProduct.id,
           categoryId: catId,
         }));
-        await expoDB
-          .insert(schema.product_categories)
+        await db
+          .insert(schema.wishlist_categories)
           .values(productCategoryValues);
       }
 
@@ -163,16 +173,16 @@ const CreateWishlistScreen = () => {
       />
 
       </ScrollView>
-      {/* <KeyboardAvoidingView behavior="height">
+      <KeyboardAvoidingView behavior="height">
         <TouchableOpacity
-          className="p-4 rounded-xl  "
+          className="p-4 rounded-xl bg-blue-500 "
           onPress={handleSubmit(handleCreate)}
         >
           <Text weight="bold" variant="h4" className=" text-center text-white">
             Create Wishlist
           </Text>
         </TouchableOpacity>
-      </KeyboardAvoidingView> */}
+      </KeyboardAvoidingView>
     </View>
   );
 };
