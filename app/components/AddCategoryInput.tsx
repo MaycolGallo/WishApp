@@ -83,7 +83,7 @@ const AddCategoryInput: React.FC<AddCategoryInputProps> = ({
         enablePanDownToClose
         // onChange={handleSheetChanges}
       >
-        <BottomSheetView className="flex-1 p-4 dark:bg-neutral-800">
+        <BottomSheetView className="flex-1 p-4 dark:bg-neutral-900">
           <Text
             variant="subtitle"
             className="mb-2 dark:text-white text-gray-700"
@@ -99,8 +99,8 @@ const AddCategoryInput: React.FC<AddCategoryInputProps> = ({
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                placeholderClassName="dark:text-gray-400"
-                className="p-3 mb-4 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-300 rounded-lg"
+                placeholderClassName="dark:text-gray-100"
+                className="p-3 mb-4 bg-white dark:text-white dark:bg-neutral-800 dark:border-gray-700 border border-gray-300 rounded-lg"
                 placeholder="Category Name"
               />
             )}
@@ -109,7 +109,7 @@ const AddCategoryInput: React.FC<AddCategoryInputProps> = ({
             className="justify-center p-3 my-4 bg-primary "
             onPress={handleCreateCategory}
           >
-            <Text className="font-bold text-center text-white">Crear</Text>
+            <Text variant="subtitle" className=" text-center text-white">Crear</Text>
           </TouchableOpacity>
         </BottomSheetView>
       </BottomSheetModal>

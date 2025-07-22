@@ -10,4 +10,5 @@ CREATE TABLE `__new_wishlist_categories` (
 INSERT INTO `__new_wishlist_categories`("wishlistId", "categoryId") SELECT "wishlistId", "categoryId" FROM `wishlist_categories`;--> statement-breakpoint
 DROP TABLE `wishlist_categories`;--> statement-breakpoint
 ALTER TABLE `__new_wishlist_categories` RENAME TO `wishlist_categories`;--> statement-breakpoint
+DELETE FROM wishlist WHERE name like '%64%';
 PRAGMA foreign_keys=ON;

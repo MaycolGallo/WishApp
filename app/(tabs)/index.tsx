@@ -3,14 +3,12 @@ import { View } from "react-native";
 import { useNavigation } from "expo-router";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import * as schema from "../../db/schema";
-import { useSQLiteContext } from "expo-sqlite";
-import Text from "../components/ui/text-ui";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import CategoryPills from "../components/wishlist/CategoryPills";
 import WishlistGrid from "../components/wishlist/WishlistGrid";
 import CreateWishlistButton from "../components/wishlist/CreateWishlistButton";
 import { db } from "~/lib/db";
 import { eq } from "drizzle-orm";
+import {AnimatedCounter} from '../components/ui/animated-counter-up';
 
 const HomeScreen = () => {
   // const db = useSQLiteContext();
@@ -21,14 +19,20 @@ const HomeScreen = () => {
     db.select().from(schema.wishlists)
   );
 
-  console.log("allWishlists", allWishlists);
-
   const { data: categories } = useLiveQuery(
     db.select().from(schema.categories)
   );
 
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [filteredWishlists, setFilteredWishlists] = useState(allWishlists);
+  // const [filteredWishlists, setFilteredWishlists] = useState(allWishlists);
+  const [categoryFilteredWishlists, setCategoryFilteredWishlists] =
+    useState<schema.Wishlist[] | null>(null);
+
+
+  const filteredWishlists = useMemo(
+    () => (selectedCategory === null ? (allWishlists || []) : (categoryFilteredWishlists || [])),
+    [selectedCategory, allWishlists, categoryFilteredWishlists]
+  );
 
   const total = useMemo(() => {
     return filteredWishlists.reduce((acc, item) => acc + item.totalPrice, 0);
@@ -36,18 +40,22 @@ const HomeScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+
       headerTitle: () => (
-        <Text className="text-lg font-bold text-white">
-          Total: ${total.toFixed(2)}
-        </Text>
+        <AnimatedCounter
+          value={total}
+          className=" dark:text-white"
+          style="roll" // or "roll" for classic counter effect
+        />
       ),
     });
   }, [navigation, total]);
 
   const handleCategoryPress = async (categoryId: number | null) => {
     setSelectedCategory(categoryId);
+
     if (categoryId === null) {
-      setFilteredWishlists(allWishlists);
+      setCategoryFilteredWishlists(null);
     } else {
       const wishlists = db
         .select()
@@ -63,7 +71,7 @@ const HomeScreen = () => {
         .where(eq(schema.categories.id, categoryId))
         .all();
 
-      setFilteredWishlists(
+      setCategoryFilteredWishlists(
         wishlists.map((wishlist) => wishlist?.wishlists ?? []).flat()
       );
     }

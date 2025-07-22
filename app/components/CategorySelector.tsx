@@ -28,7 +28,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
             className={`p-2 m-1 rounded-lg border ${
               selectedCategories.includes(cat.id)
                 ? "bg-blue-500 border-blue-500"
-                : "bg-white border-gray-300"
+                : "bg-white dark:bg-neutral-800 dark:border-neutral-700 border-gray-300"
             }`}
           >
             <Text

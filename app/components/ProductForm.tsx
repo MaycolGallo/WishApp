@@ -2,7 +2,7 @@ import React from "react";
 import { TextInput } from "react-native";
 import { Controller, Control, FieldErrors } from "react-hook-form";
 import { Input } from "../components/ui/input";
-import  Text  from "../components/ui/text-ui";
+import Text from "../components/ui/text-ui";
 
 interface ProductFormProps {
   control: Control<any>;
@@ -29,28 +29,38 @@ const ProductForm: React.FC<ProductFormProps> = ({ control, errors }) => (
       name="name"
     />
     {errors.name && (
-      <Text className="mb-4 text-red-500">{errors.name.message.toString()}</Text>
+      <Text className="mb-4 text-red-500">
+        {errors.name.message.toString()}
+      </Text>
     )}
 
-    <Text variant="subtitle" className="mb-2 dark:text-white text-gray-700">Amount</Text>
+    <Text variant="subtitle" className="mb-2 dark:text-white text-gray-700">
+      Amount
+    </Text>
     <Controller
       control={control}
-      rules={{ required: "Please enter an amount." }}
-      render={({ field: { onChange, onBlur, value } }) => (
+      rules={{
+        required: "Enter an amount",
+        validate: (val) => !isNaN(Number(val)) || "Invalid number",
+      }}
+      render={({ field: { onChange, value } }) => (
         <Input
-          className="p-3 mb-4  bg-white border border-gray-300"
-          onBlur={onBlur}
-          onChangeText={(text) => onChange(parseInt(text))}
-          value={value.toString()}
-          placeholder="e.g., 1200"
-          keyboardType="numeric"
+          value={String(value || "")}
+          onChangeText={(text) => {
+            // 1. Only allow numbers and ONE decimal point
+            const cleanText = text
+              .replace(/[^0-9.]/g, "") // Remove non-digits
+              .replace(/(\..*)\./g, "$1"); // Allow only one dot
+
+            // 2. Update value (keep as string until submission)
+            onChange(cleanText === "" ? null : cleanText);
+          }}
+          keyboardType="decimal-pad"
+          placeholder="0.00"
         />
       )}
       name="totalPrice"
     />
-    {errors.totalPrice && (
-      <Text className="mb-4 text-red-500">{errors.totalPrice.message?.toString()}</Text>
-    )}
 
     <Text variant="subtitle" className="mb-2 dark:text-white text-gray-700">
       Description (Optional)
