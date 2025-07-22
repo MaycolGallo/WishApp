@@ -33,11 +33,29 @@ export const list_wishlists = sqliteTable("list_wishlists", {
   categoryId: int().notNull().references(() => categories.id),
 });
 
+export const lists = sqliteTable("lists", {
+  id: int().primaryKey({ autoIncrement: true }),
+  name: text().notNull(),
+  createdAt: text().notNull(), // ISO date string
+});
+
+export const list_wishlist_items = sqliteTable("list_wishlist_items", {
+  id: int().primaryKey({ autoIncrement: true }),
+  listId: int()
+    .notNull()
+    .references(() => lists.id),
+  wishlistId: int()
+    .notNull()
+    .references(() => wishlists.id),
+});
+
 
 // export type Product = typeof products.$inferSelect;
 export type Wishlist = typeof wishlists.$inferSelect;
 export type Category = typeof categories.$inferSelect;
 export type WishlistCategory = typeof wishlist_categories.$inferSelect;
 export type ListWishlist = typeof list_wishlists.$inferSelect;
+export type List = typeof lists.$inferSelect;
+export type ListWishlistItem = typeof list_wishlist_items.$inferSelect;
 
 export type WhislitPayload = typeof wishlists.$inferInsert;

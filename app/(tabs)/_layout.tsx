@@ -47,6 +47,18 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="lists"
+        options={{
+          title: "Lists",
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+          headerRight: () => (
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <ThemeToggle />
+            </View>
+          ),
+        }}
+      />
     </Tabs>
   );
 }

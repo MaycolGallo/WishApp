@@ -8,6 +8,7 @@ import m0003 from './0003_neat_azazel.sql';
 import m0004 from './0004_wise_annihilus.sql';
 import m0005 from './0005_nifty_fallen_one.sql';
 import m0006 from './0006_lowly_sebastian_shaw.sql';
+import m0007 from './0007_cooing_nightcrawler.sql';
 
   export default {
     journal,
@@ -18,7 +19,8 @@ m0002,
 m0003,
 m0004,
 m0005,
-m0006
+m0006,
+m0007
     }
   }
   
