@@ -103,7 +103,7 @@ const CreateListScreen = () => {
           style={{ width: "100%", height: 100, borderRadius: 8 }}
           contentFit="cover"
         />
-        <Text className="mt-2 font-bold">{item.name}</Text>
+        <Text variant="h4" className="mt-2">{item.name}</Text>
         <Text className="text-gray-500">${item.totalPrice}</Text>
       </TouchableOpacity>
     );

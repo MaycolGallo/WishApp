@@ -29,8 +29,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ control, errors }) => (
       name="name"
     />
     {errors.name && (
-      <Text className="mb-4 text-red-500">
-        {errors.name.message.toString()}
+      <Text className="mb-4 dark:text-red-500 text-red-500">
+        {errors.name.message?.toString()}
       </Text>
     )}
 

@@ -37,7 +37,6 @@ export {
   ErrorBoundary,
 } from "expo-router";
 
-
 export default function RootLayout() {
   return (
     <React.Suspense fallback={<Text>Loading...</Text>}>
@@ -77,25 +76,26 @@ function App() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="create-wishlist"
-          options={{
-            title: "Create Wishlist",
-            headerTitleAlign: "center",
-          }}
-        />
-        <Stack.Screen
-          name="wishlist-detail"
-          options={{
-            title: "Wishlist Details",
-            headerTitleAlign: "center",
-          }}
-        />
-      </Stack>
-      <PortalHost />
-    </ThemeProvider>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="create-wishlist"
+            options={{
+              title: "Create Wishlist",
+              headerTitleAlign: "center",
+            }}
+          />
+          <Stack.Screen
+            name="wishlist-detail"
+            options={{
+              title: "Wishlist Details",
+              headerTitleAlign: "center",
+            }}
+          />
+        </Stack>
+
+        <PortalHost />
+      </ThemeProvider>
   );
 }
