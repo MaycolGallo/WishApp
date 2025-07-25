@@ -1,6 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
-import Text from './ui/text-ui';
+import Text from "./ui/text-ui";
 
 interface Category {
   id: number;
@@ -18,7 +18,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   selectedCategories,
   toggleCategory,
 }) => (
-  <View className="flex-grow flex-wrap mb-4">
+  <View className="flex-row flex-wrap flex-grow mb-4">
     {categories.length > 0 ? (
       <>
         {categories.map((cat) => (
@@ -44,7 +44,13 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
         ))}
       </>
     ) : (
-      <Text weight="semiBold" variant="h4" className="text-neutal-900 text-muted-foreground">No categories available</Text>
+      <Text
+        weight="semiBold"
+        variant="h4"
+        className="text-neutal-900 text-muted-foreground"
+      >
+        No categories available
+      </Text>
     )}
   </View>
 );

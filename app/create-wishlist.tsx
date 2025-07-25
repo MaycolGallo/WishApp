@@ -133,7 +133,7 @@ const CreateWishlistScreen = () => {
         })
         .returning();
 
-        console.log("newProduct", newProduct);
+      console.log("newProduct", newProduct);
 
       // 2. Link product to selected categories
       if (newProduct && selectedCategories.length > 0) {
@@ -146,12 +146,8 @@ const CreateWishlistScreen = () => {
           .values(productCategoryValues);
       }
 
-      if (router.canGoBack()) {
-        router.back();
-      } else {
-        router.push("/(tabs)");
-      }
       reset();
+      router.replace("/(tabs)");
     } catch (error) {
       console.error("Error creating product:", error);
       alert("Failed to create product.");
@@ -161,24 +157,26 @@ const CreateWishlistScreen = () => {
   return (
     <View className="flex-1 bg-white dark:bg-neutral-900">
       <ScrollView className="flex-1 p-4">
-      {/* Product Form Fields */}
-      <ProductForm control={control} errors={errors} />
+        {/* Product Form Fields */}
+        <ProductForm control={control} errors={errors} />
 
-      <AddCategoryInput
-        categories={categories}
-        selectedCategories={selectedCategories}
-        toggleCategory={toggleCategory}
-        control={control}
-        handleCreateCategory={handleCreateCategory}
-      />
-
+        <AddCategoryInput
+          categories={categories}
+          selectedCategories={selectedCategories}
+          toggleCategory={toggleCategory}
+          control={control}
+          handleCreateCategory={handleCreateCategory}
+        />
       </ScrollView>
-      <KeyboardAvoidingView behavior="height">
+      <KeyboardAvoidingView
+        style={{ marginBottom: insets.bottom }}
+        behavior="height"
+      >
         <TouchableOpacity
-          className="p-4 rounded-xl bg-blue-500 "
+          className="p-4 bg-blue-500 rounded-xl "
           onPress={handleSubmit(handleCreate)}
         >
-          <Text weight="bold" variant="h4" className=" text-center text-white">
+          <Text weight="bold" variant="h4" className="text-center text-white ">
             Create Wishlist
           </Text>
         </TouchableOpacity>

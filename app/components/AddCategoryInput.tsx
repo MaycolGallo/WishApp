@@ -56,11 +56,11 @@ const AddCategoryInput: React.FC<AddCategoryInputProps> = ({
   return (
     // <GestureHandlerRootView>
     <View className="mb-4">
-      <View className="flex-row  items-center justify-between">
+      <View className="flex-row items-center justify-between">
         <Text
           size={24}
           variant="h3"
-          className="mb-2 dark:text-white text-gray-700"
+          className="mb-2 text-gray-700 dark:text-white"
         >
           Categories
         </Text>
@@ -81,12 +81,14 @@ const AddCategoryInput: React.FC<AddCategoryInputProps> = ({
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}
         enablePanDownToClose
+        backgroundStyle={{ backgroundColor: "#fff" }}
+        // handleIndicatorStyle={{ backgroundColor: "red" }}
         // onChange={handleSheetChanges}
       >
         <BottomSheetView className="flex-1 p-4 dark:bg-neutral-900">
           <Text
             variant="subtitle"
-            className="mb-2 dark:text-white text-gray-700"
+            className="mb-2 text-gray-700 dark:text-white"
           >
             Nombre
           </Text>
@@ -100,16 +102,18 @@ const AddCategoryInput: React.FC<AddCategoryInputProps> = ({
                 onChangeText={onChange}
                 value={value}
                 placeholderClassName="dark:text-gray-100"
-                className="p-3 mb-4 bg-white dark:text-white dark:bg-neutral-800 dark:border-gray-700 border border-gray-300 rounded-lg"
+                className="p-3 mb-4 bg-white border border-gray-300 rounded-lg dark:text-white dark:bg-neutral-800 dark:border-gray-700"
                 placeholder="Category Name"
               />
             )}
           />
           <TouchableOpacity
-            className="justify-center p-3 my-4 bg-primary "
+            className="justify-center p-3 my-4 bg-primary rounded-xl"
             onPress={handleCreateCategory}
           >
-            <Text variant="subtitle" className=" text-center text-white">Crear</Text>
+            <Text variant="subtitle" className="text-center text-white ">
+              Crear
+            </Text>
           </TouchableOpacity>
         </BottomSheetView>
       </BottomSheetModal>
