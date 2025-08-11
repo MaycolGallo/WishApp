@@ -98,21 +98,25 @@ const AnimatedPill: React.FC<{
   );
 };
 
-const CategoryPills: React.FC<CategoryPillsProps> = ({ 
-  categories, 
-  selectedCategory, 
-  onCategoryPress 
+const CategoryPills: React.FC<CategoryPillsProps> = ({
+  categories,
+  selectedCategory,
+  onCategoryPress,
 }) => {
   return (
-    <View style={{ flexGrow: 0, marginBottom: 16 }}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    <View style={{ flexGrow: 0, marginBottom: 16, marginHorizontal: -16 }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 16 }}
+      >
         <AnimatedPill
           isSelected={selectedCategory === null}
           onPress={() => onCategoryPress(null)}
         >
           All
         </AnimatedPill>
-        
+
         {categories.map((category) => (
           <AnimatedPill
             key={category.id}

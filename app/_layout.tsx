@@ -19,7 +19,10 @@ import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import migrations from "../drizzle/migrations";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { db } from "~/lib/db";
 
@@ -45,11 +48,13 @@ export default function RootLayout() {
         options={{ enableChangeListener: true }}
         useSuspense
       >
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <BottomSheetModalProvider>
-            <App />
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
+        <SafeAreaProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+              <App />
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
       </SQLiteProvider>
     </React.Suspense>
   );
@@ -57,7 +62,6 @@ export default function RootLayout() {
 
 function App() {
   const { colorScheme, isDarkColorScheme } = useColorScheme();
-  // const db = useSQLiteContext();
   const { success, error } = useMigrations(db, migrations);
 
   React.useLayoutEffect(() => {
@@ -76,26 +80,39 @@ function App() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="create-wishlist"
-            options={{
-              title: "Create Wishlist",
-              headerTitleAlign: "center",
-            }}
-          />
-          <Stack.Screen
-            name="wishlist-detail"
-            options={{
-              title: "Wishlist Details",
-              headerTitleAlign: "center",
-            }}
-          />
-        </Stack>
+      <StatusBar
+        style={isDarkColorScheme ? "light" : "dark"}
+        backgroundColor={
+          isDarkColorScheme
+            ? NAV_THEME.dark.background
+            : NAV_THEME.light.background
+        }
+        translucent={false}
+      />
+      <RootStack />
+      <PortalHost />
+    </ThemeProvider>
+  );
+}
 
-        <PortalHost />
-      </ThemeProvider>
+function RootStack() {
+  return (
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="create-wishlist"
+        options={{
+          title: "Create Wishlist",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="wishlist-detail"
+        options={{
+          title: "Wishlist Details",
+          headerTitleAlign: "center",
+        }}
+      />
+    </Stack>
   );
 }

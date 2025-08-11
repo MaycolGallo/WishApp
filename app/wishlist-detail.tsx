@@ -64,9 +64,9 @@ const WishlistDetailScreen = () => {
 
   return (
     <>
-      <SafeAreaView className="flex-1 bg-neutral-100 dark:bg-neutral-800">
+      <View className="flex-1 bg-neutral-100 dark:bg-neutral-800">
         <RenderItem db={db} item={wishlist} />
-      </SafeAreaView>
+      </View>
       <EditWishlistModal
         ref={bottomSheetRef}
         wishlist={wishlist}
