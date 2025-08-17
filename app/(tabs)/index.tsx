@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useCallback, useMemo } from "react";
+import React, { useState, useLayoutEffect, useMemo } from "react";
 import { View } from "react-native";
 import { useNavigation } from "expo-router";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
@@ -8,7 +8,12 @@ import WishlistGrid from "../components/wishlist/WishlistGrid";
 import CreateWishlistButton from "../components/wishlist/CreateWishlistButton";
 import { db } from "~/lib/db";
 import { eq } from "drizzle-orm";
-import {AnimatedCounter} from '../components/ui/animated-counter-up';
+import { AnimatedCounter } from '../components/ui/animated-counter-up';
+import Animated, {
+  LinearTransition,
+  SlideInRight,
+  SlideOutLeft
+} from "react-native-reanimated";
 
 const HomeScreen = () => {
   // const db = useSQLiteContext();
@@ -84,7 +89,15 @@ const HomeScreen = () => {
         selectedCategory={selectedCategory}
         onCategoryPress={handleCategoryPress}
       />
-      <WishlistGrid wishlists={filteredWishlists} />
+      <Animated.View
+        key={selectedCategory} // Force re-render on category change
+        entering={SlideInRight.duration(300).springify()}
+        exiting={SlideOutLeft.duration(200)}
+        layout={LinearTransition.springify()}
+        style={{ flex: 1 }}
+      >
+        <WishlistGrid wishlists={filteredWishlists} />
+      </Animated.View>
       <CreateWishlistButton />
     </View>
   );

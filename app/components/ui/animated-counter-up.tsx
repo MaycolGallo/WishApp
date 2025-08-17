@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
   withSpring,
   Easing,
+  runOnJS,
 } from "react-native-reanimated";
 
 const AnimatedText = Animated.createAnimatedComponent(Text);
@@ -19,22 +20,27 @@ const AnimatedDigit: React.FC<{
   const translateY = useSharedValue(0);
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
+  const prevDigit = React.useRef(digit);
 
   React.useEffect(() => {
-    // Animate when digit changes
-    translateY.value = withSpring(-20, { damping: 15 }, () => {
-      translateY.value = withSpring(0, { damping: 15 });
-    });
+    // Only animate if digit actually changed
+    if (prevDigit.current !== digit) {
+      // Animate when digit changes
+      translateY.value = withSpring(-20, { damping: 15 }, () => {
+        translateY.value = withSpring(0, { damping: 15 });
+      });
 
-    // Scale animation for emphasis
-    scale.value = withTiming(1.2, { duration: 150 }, () => {
-      scale.value = withTiming(1, { duration: 150 });
-    });
+      // Scale animation for emphasis
+      scale.value = withTiming(1.2, { duration: 150 }, () => {
+        scale.value = withTiming(1, { duration: 150 });
+      });
 
-    // Opacity flash
-    opacity.value = withTiming(0.7, { duration: 100 }, () => {
-      opacity.value = withTiming(1, { duration: 100 });
-    });
+      // Opacity flash
+      opacity.value = withTiming(0.7, { duration: 100 }, () => {
+        opacity.value = withTiming(1, { duration: 100 });
+      });
+    }
+    prevDigit.current = digit;
   }, [digit]);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -65,19 +71,24 @@ const RollingDigit: React.FC<{
 
   React.useEffect(() => {
     if (prevDigit.current !== digit) {
-      // Roll up animation
+      // Roll up animation - smoother transition
       translateY.value = withTiming(
         -30,
         {
-          duration: 200,
-          easing: Easing.out(Easing.cubic),
+          duration: 150,
+          easing: Easing.out(Easing.quad),
         },
-        () => {
-          translateY.value = 30; // Jump to bottom
-          translateY.value = withTiming(0, {
-            duration: 300,
-            easing: Easing.out(Easing.bounce),
-          });
+        (finished) => {
+          if (finished) {
+            // Use runOnJS to ensure proper timing
+            runOnJS(() => {
+              translateY.value = 30; // Start from bottom
+              translateY.value = withTiming(0, {
+                duration: 200,
+                easing: Easing.out(Easing.back(1.2)),
+              });
+            })();
+          }
         }
       );
     }
@@ -87,13 +98,18 @@ const RollingDigit: React.FC<{
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: translateY.value }],
+      fontWeight: "600",
+      fontSize: 24,
+      fontFamily: "Nunito_600SemiBold",
     };
   });
 
   return (
-    <AnimatedText className={className} style={animatedStyle}>
-      {digit}
-    </AnimatedText>
+    <View style={{ overflow: 'hidden', height: 30 }}>
+      <AnimatedText className={className} style={animatedStyle}>
+        {digit}
+      </AnimatedText>
+    </View>
   );
 };
 
@@ -107,12 +123,15 @@ export const AnimatedCounter: React.FC<{
   const formattedValue = value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const DigitComponent = style === "roll" ? RollingDigit : AnimatedDigit;
 
+  // Memoize the digits to prevent unnecessary re-renders
+  const digits = useMemo(() => formattedValue.split(""), [formattedValue]);
+
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <Text className={className}>Total: $</Text>
-      {formattedValue.split("").map((char, index) => (
+      <Text className={className} style={{ fontWeight: "600", fontSize: 24 }}>Total: $</Text>
+      {digits.map((char, index) => (
         <DigitComponent
-          key={`${index}-${char}`} // Key includes char to force re-render
+          key={index} // Use stable index-based key
           digit={char}
           weight={weight}
           className={className}

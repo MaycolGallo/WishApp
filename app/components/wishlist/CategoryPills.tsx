@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, ScrollView, TouchableOpacity, Text } from 'react-native';
-import Animated, { 
-  useSharedValue, 
-  useAnimatedStyle, 
-  withSpring, 
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
   withTiming,
   interpolateColor,
   runOnJS
@@ -32,7 +32,7 @@ const AnimatedPill: React.FC<{
       damping: 15,
       stiffness: 150,
     });
-    
+
     colorProgress.value = withTiming(isSelected ? 1 : 0, {
       duration: 200,
     });
@@ -51,6 +51,7 @@ const AnimatedPill: React.FC<{
       paddingHorizontal: 16,
       paddingVertical: 8,
       marginRight: 8,
+      marginVertical: 2, // Add vertical margin to prevent clipping
       borderRadius: 20,
     };
   });
@@ -104,11 +105,20 @@ const CategoryPills: React.FC<CategoryPillsProps> = ({
   onCategoryPress,
 }) => {
   return (
-    <View style={{ flexGrow: 0, marginBottom: 16, marginHorizontal: -16 }}>
+    <View style={{
+      flexGrow: 0,
+      marginBottom: 16,
+      marginHorizontal: -16,
+      paddingVertical: 4 // Add vertical padding to prevent clipping
+    }}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16 }}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingVertical: 4, // Add vertical padding in scroll content
+          alignItems: 'center' // Center items vertically
+        }}
       >
         <AnimatedPill
           isSelected={selectedCategory === null}
