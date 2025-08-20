@@ -2,48 +2,75 @@ import { db } from '../lib/db';
 import * as schema from './schema';
 
 const seedData = async () => {
-  // Clear existing data
-  await db.delete(schema.wishlist_products);
-  await db.delete(schema.product_categories);
-  await db.delete(schema.products);
-  await db.delete(schema.categories);
+  console.log('Starting to seed database...');
+
+  // Clear existing data in the correct order to avoid foreign key constraint issues
+  console.log('Clearing existing data...');
+  await db.delete(schema.list_wishlist_items);
+  await db.delete(schema.list_wishlists);
+  await db.delete(schema.wishlist_categories);
+  await db.delete(schema.lists);
   await db.delete(schema.wishlists);
+  await db.delete(schema.categories);
+  console.log('Existing data cleared.');
 
   // Insert categories
-  const [electronics, books, clothing] = await db.insert(schema.categories).values([
+  console.log('Inserting categories...');
+  const [electronics, books, clothing, homeGoods] = await db.insert(schema.categories).values([
     { name: 'Electronics' },
     { name: 'Books' },
     { name: 'Clothing' },
+    { name: 'Home Goods' },
   ]).returning();
+  console.log('Categories inserted.');
 
-  // Insert products
-  const [product1, product2, product3] = await db.insert(schema.products).values([
-    { nombre: 'Laptop', price: 1200, imageUrl: 'https://via.placeholder.com/150' },
-    { nombre: 'The Great Gatsby', price: 15, imageUrl: 'https://via.placeholder.com/150' },
-    { nombre: 'T-Shirt', price: 25, imageUrl: 'https://via.placeholder.com/150' },
+  // Insert wishlists
+  console.log('Inserting wishlists...');
+  const [techWishlist, bookWishlist] = await db.insert(schema.wishlists).values([
+    {
+      name: 'Tech Upgrades',
+      description: 'New gadgets for my setup',
+      createdAt: new Date().toISOString(),
+      totalPrice: 1500,
+      completed: 0,
+      imageUrl: 'https://via.placeholder.com/150',
+    },
+    {
+      name: 'Summer Reading List',
+      description: 'Books to read this summer',
+      createdAt: new Date().toISOString(),
+      totalPrice: 75,
+      completed: 0,
+      imageUrl: 'https://via.placeholder.com/150',
+    },
   ]).returning();
+  console.log('Wishlists inserted.');
 
-  // Link products to categories
-  await db.insert(schema.product_categories).values([
-    { productId: product1.id, categoryId: electronics.id },
-    { productId: product2.id, categoryId: books.id },
-    { productId: product3.id, categoryId: clothing.id },
+  // Link wishlists to categories (Many-to-many)
+  console.log('Linking wishlists to categories...');
+  await db.insert(schema.wishlist_categories).values([
+    { wishlistId: techWishlist.id, categoryId: electronics.id },
+    { wishlistId: bookWishlist.id, categoryId: books.id },
   ]);
+  console.log('Wishlists linked to categories.');
 
-  // Insert a wishlist
-  const [wishlist] = await db.insert(schema.wishlists).values({
-    name: 'My Wishlist',
-    createdAt: new Date().toISOString(),
-    totalPrice: 1240,
-    completed: 0,
+
+  // Insert a main list (e.g., "My Shopping Lists")
+  console.log('Inserting lists...');
+  const [mainList] = await db.insert(schema.lists).values({
+      name: 'Main Shopping List',
+      createdAt: new Date().toISOString(),
   }).returning();
+  console.log('Lists inserted.');
 
-  // Link products to the wishlist
-  await db.insert(schema.wishlist_products).values([
-    { wishlistId: wishlist.id, productId: product1.id },
-    { wishlistId: wishlist.id, productId: product2.id },
-    { wishlistId: wishlist.id, productId: product3.id },
+  // Link wishlists to the main list
+  console.log('Linking wishlists to the main list...');
+  await db.insert(schema.list_wishlist_items).values([
+      { listId: mainList.id, wishlistId: techWishlist.id },
+      { listId: mainList.id, wishlistId: bookWishlist.id },
   ]);
+  console.log('Wishlists linked to the main list.');
+
 
   console.log('Database seeded successfully!');
 };

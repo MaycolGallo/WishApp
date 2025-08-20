@@ -1,4 +1,4 @@
-DROP TABLE `products`;
+DROP TABLE IF EXISTS `products`;
 --> statement-breakpoint
 PRAGMA foreign_keys = OFF;
 --> statement-breakpoint

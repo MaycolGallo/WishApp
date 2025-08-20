@@ -16,7 +16,7 @@ const ListsScreen = () => {
 
   const renderItem = ({ item }: { item: schema.List }) => (
     <TouchableOpacity
-      className="m-2 p-4 bg-white dark:bg-neutral-700 rounded-lg shadow"
+      className="p-4 m-2 bg-white rounded-lg shadow dark:bg-neutral-700"
       onPress={() => router.push(`/list-detail?id=${item.id}` as any)}
     >
       <Text weight="bold" className="text-lg">
@@ -28,7 +28,7 @@ const ListsScreen = () => {
   return (
     <View className="flex-1 p-4 bg-neutral-100 dark:bg-neutral-800">
       <Button onPress={() => router.push("/create-list")} className="mb-4">
-        <Text>Create New List</Text>
+        <Text>Create New Lista</Text>
       </Button>
       <FlatList
         data={lists}
